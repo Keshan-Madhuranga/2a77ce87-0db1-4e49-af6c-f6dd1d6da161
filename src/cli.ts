@@ -1,7 +1,11 @@
 import { input, select } from '@inquirer/prompts';
 import { Command } from 'commander';
 import { loadAppData } from './core/data-loader';
-import { generateDiagnosticReport, generateProgressReport } from './reports';
+import {
+  generateDiagnosticReport,
+  generateProgressReport,
+  generateFeedbackReport,
+} from './reports';
 import { AppData } from './models/types';
 
 const program = new Command();
@@ -35,7 +39,7 @@ async function runCLI(): Promise<void> {
         output = generateProgressReport(data, studentId);
         break;
       case 'feedback':
-        output = generateDiagnosticReport(data, studentId);
+        output = generateFeedbackReport(data, studentId);
         break;
       default:
         console.log('Invalid report type selected.');
