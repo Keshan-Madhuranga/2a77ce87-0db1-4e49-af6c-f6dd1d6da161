@@ -1,7 +1,7 @@
 import { input, select } from '@inquirer/prompts';
 import { Command } from 'commander';
 import { loadAppData } from './core/data-loader';
-import { generateDiagnosticReport } from './reports';
+import { generateDiagnosticReport, generateProgressReport } from './reports';
 import { AppData } from './models/types';
 
 const program = new Command();
@@ -32,7 +32,7 @@ async function runCLI(): Promise<void> {
         output = generateDiagnosticReport(data, studentId);
         break;
       case 'progress':
-        output = generateDiagnosticReport(data, studentId);
+        output = generateProgressReport(data, studentId);
         break;
       case 'feedback':
         output = generateDiagnosticReport(data, studentId);
