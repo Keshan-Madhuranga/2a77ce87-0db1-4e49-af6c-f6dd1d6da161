@@ -29,13 +29,13 @@ async function runCLI(): Promise<void> {
     let output: string = '';
     switch (reportType) {
       case 'diagnostic':
-        output = generateDiagnosticReport();
+        output = generateDiagnosticReport(data, studentId);
         break;
       case 'progress':
-        output = generateDiagnosticReport();
+        output = generateDiagnosticReport(data, studentId);
         break;
       case 'feedback':
-        output = generateDiagnosticReport();
+        output = generateDiagnosticReport(data, studentId);
         break;
       default:
         console.log('Invalid report type selected.');
