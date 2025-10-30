@@ -1,0 +1,39 @@
+
+name: Run Tests
+
+on:
+  push:
+    branches: [ develop, 'feature/*' ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build TypeScript project
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
+
+      - name: Report test results
+        if: success()
+        run: echo "All tests passed successfully!"
+
+      - name: Handle test failures
+        if: failure()
+        run: echo "Tests failed. Please fix before merging."
