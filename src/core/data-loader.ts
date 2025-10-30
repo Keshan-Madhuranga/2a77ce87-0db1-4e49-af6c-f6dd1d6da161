@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { AppData, Student, Question, Assessment, StudentResponse } from '../models/types';
+import { AppDataSchema } from '../models/schemas';
 
 async function loadJsonFile<T>(filePath: string): Promise<T> {
   try {
@@ -23,12 +24,22 @@ export async function loadAppData(): Promise<AppData> {
       loadJsonFile<StudentResponse[]>(path.join(baseDir, 'student-responses.json')),
     ]);
 
-    return {
+    const parsed = AppDataSchema.safeParse({
       students,
       questions,
       assessments,
       studentResponses,
-    };
+    });
+
+    if (!parsed.success) {
+      console.error('Data validation failed:');
+      for (const issue of parsed.error.issues) {
+        const path = issue.path.length ? issue.path.join('.') : '(root)';
+        console.error(`  • ${path}: ${issue.message}`);
+      }
+      throw new Error('Invalid input data');
+    }
+    return parsed.data;
   } catch (error) {
     console.error('Error loading application data:', error);
     throw error;

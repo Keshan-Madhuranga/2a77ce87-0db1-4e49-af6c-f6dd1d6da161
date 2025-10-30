@@ -48,8 +48,8 @@ export interface MultipleChoiceOption {
 export interface StudentResponse {
   id: string;
   assessmentId: string;
-  assigned?: string;
-  started?: string;
+  assigned: string;
+  started: string;
   completed?: string;
   student: StudentRef;
   responses: ResponseItem[];
