@@ -9,8 +9,8 @@ async function loadJsonFile<T>(filePath: string): Promise<T> {
     const data = await fs.readFile(filePath, 'utf-8');
     return JSON.parse(data) as T;
   } catch (error) {
-    handleError(error, 'DataLoader-loadJsonFile')
-    throw new AppError(`Failed to load file: ${filePath}`)
+    handleError(error, 'DataLoader-loadJsonFile');
+    throw new AppError(`Failed to load file: ${filePath}`);
   }
 }
 
