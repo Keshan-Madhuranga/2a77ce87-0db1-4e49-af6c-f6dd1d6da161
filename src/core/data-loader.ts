@@ -2,14 +2,15 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { AppData, Student, Question, Assessment, StudentResponse } from '../models/types';
 import { AppDataSchema } from '../models/schemas';
+import { AppError, handleError } from '../util/error-handler';
 
 async function loadJsonFile<T>(filePath: string): Promise<T> {
   try {
     const data = await fs.readFile(filePath, 'utf-8');
     return JSON.parse(data) as T;
   } catch (error) {
-    console.error(`Failed to load file: ${filePath}`);
-    throw error;
+    handleError(error, 'DataLoader-loadJsonFile')
+    throw new AppError(`Failed to load file: ${filePath}`)
   }
 }
 
@@ -32,16 +33,15 @@ export async function loadAppData(): Promise<AppData> {
     });
 
     if (!parsed.success) {
-      console.error('Data validation failed:');
       for (const issue of parsed.error.issues) {
         const path = issue.path.length ? issue.path.join('.') : '(root)';
         console.error(`  • ${path}: ${issue.message}`);
       }
-      throw new Error('Invalid input data');
+      throw new AppError('Data validation failed');
     }
     return parsed.data;
   } catch (error) {
-    console.error('Error loading application data:', error);
-    throw error;
+    handleError(error, 'DataLoader-loadAppData');
+    throw new AppError('Failed to load application data.');
   }
 }

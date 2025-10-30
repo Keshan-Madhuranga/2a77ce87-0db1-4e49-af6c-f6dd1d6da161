@@ -7,6 +7,7 @@ import {
   generateFeedbackReport,
 } from './reports';
 import { AppData } from './models/types';
+import { handleError } from './util/error-handler';
 
 const program = new Command();
 
@@ -42,15 +43,14 @@ async function runCLI(): Promise<void> {
         output = generateFeedbackReport(data, studentId);
         break;
       default:
-        console.log('Invalid report type selected.');
-        return;
+        throw new Error('Invalid report type selected.');
     }
 
     console.log('\n==============================');
     console.log(output);
     console.log('==============================\n');
   } catch (error) {
-    console.error('Error running CLI:', error);
+    handleError(error, 'CLI');
   }
 }
 
